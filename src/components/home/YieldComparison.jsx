@@ -1,38 +1,69 @@
 import { useEffect, useState } from 'react';
 import { AssetCard } from './AssetCard';
-import { mockYields } from '../../mock/mockYields';
+import { BeefyService } from '../../services/beefyService';
 
 const TABS = [
-  { key: 'stable', label: 'Stable Only' },
+  { key: 'all', label: 'All' },
   { key: 'lp', label: 'LP' },
   { key: 'single', label: 'Single' }
 ];
 
 const PROTOCOLS = [
   { key: 'all', label: 'All Protocols' },
-  { key: 'PancakeSwap', label: 'PancakeSwap' },
-  { key: 'Beefy Finance', label: 'Beefy Finance' }
+  { key: 'Beefy Finance', label: 'Beefy Finance' },
+  { key: 'PancakeSwap', label: 'PancakeSwap' }
 ];
+
+const beefy = new BeefyService();
 
 export const YieldComparison = ({
   selectedAsset,
   onSelectAsset,
   onStakeClick
 }) => {
-  const [activeTab, setActiveTab] = useState('stable');
-  const [protocol, setProtocol] = useState('all');
   const [assets, setAssets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('all');
+  const [protocol, setProtocol] = useState('all');
 
   useEffect(() => {
-    setAssets(mockYields);
+    let mounted = true;
+
+    (async () => {
+      setLoading(true);
+
+      const data = await beefy.getYieldRates({
+        chain: 'bsc',
+        minTvl: 0,        // ← jangan bunuh data dulu
+        limit: 20
+      });
+
+      if (mounted) {
+        setAssets(data);
+        setLoading(false);
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const filtered = assets.filter(asset => {
-    const byType = asset.type === activeTab;
+    const byType =
+      activeTab === 'all' || asset.type === activeTab;
+
     const byProtocol =
       protocol === 'all' || asset.protocol === protocol;
+
     return byType && byProtocol;
   });
+
+  useEffect(() => {
+    console.log('assets length:', assets.length);
+    console.log('sample:', assets[0]);
+  }, [assets]);
+
 
   return (
     <div className="space-y-6">
@@ -58,13 +89,14 @@ export const YieldComparison = ({
           ))}
         </div>
 
-        {/* PROTOCOL DROPDOWN */}
+        {/* PROTOCOL FILTER */}
         <select
           value={protocol}
           onChange={(e) => setProtocol(e.target.value)}
           className="
             bg-gray-900 border border-gray-700 text-sm text-white
-            rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-purple-500
+            rounded-lg px-3 py-2 outline-none
+            focus:ring-2 focus:ring-purple-500
           "
         >
           {PROTOCOLS.map(p => (
@@ -74,6 +106,13 @@ export const YieldComparison = ({
           ))}
         </select>
       </div>
+
+      {/* LOADING */}
+      {loading && (
+        <p className="text-gray-400 text-sm">
+          Loading Beefy vaults…
+        </p>
+      )}
 
       {/* POOLS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -91,7 +130,7 @@ export const YieldComparison = ({
       </div>
 
       {/* EMPTY STATE */}
-      {filtered.length === 0 && (
+      {!loading && filtered.length === 0 && (
         <p className="text-gray-500 text-sm">
           No pools available for this selection.
         </p>

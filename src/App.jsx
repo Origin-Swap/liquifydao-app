@@ -12,6 +12,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { Navbar } from './components/Navbar';
 import { Home } from './pages/Home';
 import { Dashboard } from './pages/Dashboard';
+import { StakingPage } from './components/staking/StakingPage';
 import { LoadingScreen } from './components/LoadingScreen'; // Pastikan Anda memiliki komponen ini
 
 // Query client configuration
@@ -61,8 +62,9 @@ function App() {
                 <Navbar />
                 <div className="">
                   <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/earn" element={<Home />} />
                     <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/" element={<StakingPage />} />
                     <Route path="*" element={<Navigate to="/" />} />
                   </Routes>
                 </div>
