@@ -1,8 +1,8 @@
 // ================= ADDRESSES =================
 // Isi dengan address hasil deploy nanti
 
-export const BNB_STAKING_ADDRESS = "0x112D661CbB0Ed0e21ce473245ef70eE4543f2585"; // Ganti dengan address BNB Staking
-export const USDT_STAKING_ADDRESS = "0x30cc8Fc491C9c75810Cd7E8004203D39971Ebf2f"; // Ganti dengan address USDT Staking
+export const BNB_STAKING_ADDRESS = "0x0f0D258a0EDF63C6375cB7AB5a373195451ec304"; // Ganti dengan address BNB Staking
+export const USDT_STAKING_ADDRESS = "0x4E6856c65e66eaE1f2DDF4Ae4265D64bE06a9682"; // Ganti dengan address USDT Staking
 
 export const LIQUIFY_TOKEN_ADDRESS = "0x3930158755F1AEAc5b56C187d173F38Bd1F7f5F4";
 export const USDT_TOKEN_ADDRESS = "0xD66DF1D6dc178Cc755977D1A51733cE18Fa175eE";

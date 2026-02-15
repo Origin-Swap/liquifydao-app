@@ -112,7 +112,7 @@ export default function PoolCore({
     <div className="bg-white/5 rounded-3xl md:px-8 py-4 px-4 border border-white/10">
       {/* Title dengan LIVE label */}
       <div className="flex justify-between items-center mb-2">
-        <h2 className="text-2xl font-bold">{title}</h2>
+        <h2 className="text-xl font-bold">{title} (Flexible)</h2>
 
         {/* LIVE Label */}
         <div className="flex items-center">
