@@ -7,7 +7,7 @@ import {
   RainbowKitProvider,
   darkTheme
 } from '@rainbow-me/rainbowkit';
-import { bsc } from 'viem/chains';
+import { bscTestnet } from 'viem/chains';
 import '@rainbow-me/rainbowkit/styles.css';
 import { Navbar } from './components/Navbar';
 import { Home } from './pages/Home';
@@ -32,8 +32,8 @@ const projectId = '65e900325f6440b81073eb1b10270843';
 const wagmiConfig = getDefaultConfig({
   appName: 'SocialFi',
   projectId,
-  chains: [bsc],
-  ssr: true,
+  chains: [bscTestnet],
+  ssr: false,
 });
 
 // Main App component

@@ -22,7 +22,7 @@ export const LoadingScreen = () => {
       <div className="text-center">
         <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
         <h2 className="text-2xl font-bold text-white mb-2">Loading...</h2>
-        <p className="text-gray-400">Initializing DeFiStake</p>
+        <p className="text-gray-400">Initializing Liquify App</p>
         <div className="mt-4 w-64 bg-gray-700 rounded-full h-2">
           <div
             className="bg-blue-500 h-2 rounded-full transition-all duration-300"
