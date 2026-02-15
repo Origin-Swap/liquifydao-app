@@ -21,13 +21,13 @@ export default function PoolCore({
   isGenesis
 }) {
   const publicClient = usePublicClient();
-  const { address, isConnected } = useAccount(); // <-- TAMBAHKAN useAccount
+  const { address, isConnected } = useAccount();
 
   const [tvl, setTvl] = useState(0);
   const [apr, setApr] = useState(0);
   const [stakers, setStakers] = useState(0);
-  const [userStaked, setUserStaked] = useState("0"); // <-- STATE untuk user staked
-  const [activeTab, setActiveTab] = useState("stake"); // "stake" or "withdraw"
+  const [userStaked, setUserStaked] = useState("0");
+  const [activeTab, setActiveTab] = useState("stake");
 
   const abi = isGenesis
     ? GENESIS_STAKING_ABI
@@ -45,7 +45,7 @@ export default function PoolCore({
         args: [address]
       });
 
-      const stakedAmount = userInfo[0]; // amount di index 0
+      const stakedAmount = userInfo[0];
       const formattedStaked = formatUnits(stakedAmount, 18);
       setUserStaked(formattedStaked);
 
@@ -67,7 +67,6 @@ export default function PoolCore({
     async function load() {
       try {
         if (isGenesis) {
-          // Genesis Pool - panggil semua fungsi yang ADA
           const [tvlRaw, stakersRaw, aprRaw] = await Promise.all([
             publicClient.readContract({
               address: contractAddress,
@@ -86,19 +85,11 @@ export default function PoolCore({
             })
           ]);
 
-          setTvl(Number(formatUnits(tvlRaw, 18))); // LIQ = 18 decimals
+          setTvl(Number(formatUnits(tvlRaw, 18)));
           setStakers(Number(stakersRaw));
-          setApr(Number(aprRaw) / 100); // APR dalam basis points (15000 / 100 = 150%)
-
-          console.log("Genesis Pool Data:", {
-            tvl: Number(formatUnits(tvlRaw, 18)),
-            stakers: Number(stakersRaw),
-            apr: Number(aprRaw) / 100,
-            aprRaw: aprRaw.toString()
-          });
+          setApr(Number(aprRaw) / 100);
 
         } else {
-          // Normal Pool
           const [tvlRaw, stakersRaw, aprRaw] = await Promise.all([
             publicClient.readContract({
               address: contractAddress,
@@ -134,7 +125,17 @@ export default function PoolCore({
 
   return (
     <div className="bg-white/5 rounded-3xl md:px-8 py-4 px-4 border border-white/10">
-      <h2 className="text-2xl font-bold mb-2">{title}</h2>
+      {/* Title dengan UPCOMING label */}
+      <div className="flex justify-between items-center mb-2">
+        <h2 className="text-2xl font-bold">{title}</h2>
+
+        {/* UPCOMING Label - Muncul untuk kedua pool */}
+        <div className="flex items-center">
+          <span className="px-3 py-1 bg-yellow-500/20 border border-yellow-500/50 rounded-full text-xs font-semibold text-yellow-400 animate-pulse">
+            🚀 UPCOMING
+          </span>
+        </div>
+      </div>
 
       <div className="flex justify-between mb-6">
         <div className="flex items-center space-x-2">
@@ -248,7 +249,6 @@ export default function PoolCore({
           isGenesis={isGenesis}
         />
       ) : (
-        // Tampilkan pesan jika user belum stake
         <div className="mt-4 p-4 bg-white/5 border border-white/10 rounded-2xl text-center">
           <p className="text-gray-400 text-sm">
             {isConnected
