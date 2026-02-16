@@ -190,11 +190,6 @@ export default function StakeFormBnb({ contractAddress, onStakeSuccess }) {
         </p>
       </div>
 
-      {/* Network Info */}
-      <div className="text-xs text-gray-500 mb-2">
-        Network: {bnbBalance?.symbol || 'BNB'}
-      </div>
-
       {/* Input Field */}
       <input
         type="number"
@@ -234,13 +229,6 @@ export default function StakeFormBnb({ contractAddress, onStakeSuccess }) {
           MAX
         </button>
       </div>
-
-      {/* Connection Status */}
-      {!isConnected && (
-        <p className="text-yellow-400 text-sm mb-2">
-          Connect wallet to stake
-        </p>
-      )}
 
       {/* Stake Button */}
       <button

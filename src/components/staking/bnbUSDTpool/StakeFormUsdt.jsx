@@ -131,7 +131,7 @@ export default function StakeFormUsdt({ contractAddress, onStakeSuccess }) {
         onChange={(e) => setAmount(e.target.value)}
         className="w-full p-3 bg-white/5 rounded-xl mb-2"
         placeholder="Amount in USDT"
-        disabled={isLoading}
+        disabled={isLoading || !isConnected}
         step="0.01"
         min="0"
       />
@@ -167,14 +167,14 @@ export default function StakeFormUsdt({ contractAddress, onStakeSuccess }) {
       {/* Stake Button */}
       <button
         onClick={handleStake}
-        disabled={isLoading || !amount || parseFloat(amount) <= 0}
+        disabled={isLoading || !isConnected || !amount || parseFloat(amount) <= 0}
         className={`w-full py-3 rounded-xl transition ${
-          isLoading || !amount || parseFloat(amount) <= 0
+          isLoading || !isConnected || !amount || parseFloat(amount) <= 0
             ? "bg-gray-600 cursor-not-allowed"
-            : "bg-green-600 hover:bg-green-700"
+            : "bg-yellow-600 hover:bg-yellow-700"
         }`}
       >
-        {isLoading ? "Processing..." : "Stake USDT"}
+        {isLoading ? "Processing..." : !isConnected ? "Connect Wallet" : "Stake BNB"}
       </button>
     </div>
   );

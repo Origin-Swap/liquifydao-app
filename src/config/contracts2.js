@@ -1,11 +1,11 @@
 // ================= ADDRESSES =================
 // Isi dengan address hasil deploy nanti
 
-export const BNB_STAKING_ADDRESS = "0x0f0D258a0EDF63C6375cB7AB5a373195451ec304"; // Ganti dengan address BNB Staking
-export const USDT_STAKING_ADDRESS = "0x4E6856c65e66eaE1f2DDF4Ae4265D64bE06a9682"; // Ganti dengan address USDT Staking
+export const BNB_STAKING_ADDRESS = "0xb85d18d2A93Cf692511B1896599212BeBFDCF890"; // Ganti dengan address BNB Staking
+export const USDT_STAKING_ADDRESS = "0x9Bcb8414690647A6b477b085Ac7D1f624c449FeF"; // Ganti dengan address USDT Staking
 
-export const LIQUIFY_TOKEN_ADDRESS = "0x3930158755F1AEAc5b56C187d173F38Bd1F7f5F4";
-export const USDT_TOKEN_ADDRESS = "0xD66DF1D6dc178Cc755977D1A51733cE18Fa175eE";
+export const LIQUIFY_TOKEN_ADDRESS = "0xdc228DD2B3AF4Dde862155a1cB39498A7Dfa41C6";
+export const USDT_TOKEN_ADDRESS = "0x55d398326f99059fF775485246999027B3197955";
 
 // =====================================================
 // ================= BNB STAKING ABI =================

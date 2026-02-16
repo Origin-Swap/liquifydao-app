@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { usePublicClient, useAccount } from "wagmi";
-import { formatUnits } from "viem";
+import { formatUnits, formatEther } from "viem"; // <-- TAMBAHKAN formatEther
 import AnimatedCounter from "./../AnimatedCounter";
 import StakeFormBnb from "./StakeFormBnb";
 import StakeFormUsdt from "./StakeFormUsdt";
@@ -32,11 +32,31 @@ export default function PoolCore({
   const abi = poolType === "bnb" ? BNB_STAKING_ABI : USDT_STAKING_ABI;
   const stakeDecimals = poolType === "bnb" ? 18 : 6; // BNB = 18, USDT = 6
 
+  // Fungsi untuk format TVL dengan benar
+  const formatTVL = (rawValue) => {
+    if (!rawValue) return 0;
+
+    try {
+      if (poolType === "bnb") {
+        // Untuk BNB, gunakan formatEther karena lebih akurat
+        return Number(formatEther(rawValue));
+      } else {
+        // Untuk USDT, gunakan formatUnits dengan 6 decimals
+        return Number(formatUnits(rawValue, 6));
+      }
+    } catch (error) {
+      console.error("Error formatting TVL:", error);
+      return 0;
+    }
+  };
+
   // Fungsi untuk load data pool
   const loadPoolData = async () => {
     if (!publicClient) return;
 
     try {
+      console.log(`Loading ${poolType} pool data from:`, contractAddress);
+
       const [tvlRaw, stakersRaw, aprRaw] = await Promise.all([
         publicClient.readContract({
           address: contractAddress,
@@ -55,12 +75,20 @@ export default function PoolCore({
         })
       ]);
 
-      setTvl(Number(formatUnits(tvlRaw, stakeDecimals)));
+      console.log("Raw data:", {
+        tvlRaw: tvlRaw.toString(),
+        stakersRaw: stakersRaw.toString(),
+        aprRaw: aprRaw.toString()
+      });
+
+      // Format TVL dengan fungsi khusus
+      const formattedTVL = formatTVL(tvlRaw);
+      setTvl(formattedTVL);
       setStakers(Number(stakersRaw));
-      setApr(Number(aprRaw) / 100); // APR dalam basis points (800 / 100 = 8%)
+      setApr(Number(aprRaw) / 100);
 
       console.log(`${poolType.toUpperCase()} Pool Data:`, {
-        tvl: Number(formatUnits(tvlRaw, stakeDecimals)),
+        tvl: formattedTVL,
         stakers: Number(stakersRaw),
         apr: Number(aprRaw) / 100,
         aprRaw: aprRaw.toString()
@@ -84,7 +112,14 @@ export default function PoolCore({
       });
 
       const stakedAmount = userInfo[0]; // amount di index 0
-      const formattedStaked = formatUnits(stakedAmount, stakeDecimals);
+
+      let formattedStaked;
+      if (poolType === "bnb") {
+        formattedStaked = formatEther(stakedAmount);
+      } else {
+        formattedStaked = formatUnits(stakedAmount, 6);
+      }
+
       setUserStaked(formattedStaked);
 
       console.log("User staked:", formattedStaked, stakeToken);
@@ -106,10 +141,10 @@ export default function PoolCore({
     if (address) {
       loadUserData();
     }
-  }, [publicClient, contractAddress, poolType, address, stakeDecimals]);
+  }, [publicClient, contractAddress, poolType, address]);
 
   return (
-    <div className="bg-white/5 rounded-3xl md:px-8 py-4 px-4 border border-white/10">
+    <div className="bg-white/5 rounded-3xl md:px-8 py-4 px-4 border border-white/10 shadow-md shadow-green-200">
       {/* Title dengan LIVE label */}
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-xl font-bold">{title} (Flexible)</h2>
@@ -154,15 +189,17 @@ export default function PoolCore({
       <div className="grid grid-cols-2 gap-6 mb-6">
         <div>
           <p className="text-gray-400 text-xs">TVL</p>
-          <p className="flex items-center gap-x-1 text-gray-200 text-xs">
+          <p className="flex items-center gap-x-1 text-gray-200 text-lg font-semibold">
             <AnimatedCounter value={tvl} />
-            {stakeToken}
+            <span className="text-sm ml-1">{stakeToken}</span>
           </p>
         </div>
 
         <div>
           <p className="text-gray-400 text-xs">Stakers</p>
-          <AnimatedCounter value={stakers} />
+          <p className="text-lg font-semibold">
+            <AnimatedCounter value={stakers} />
+          </p>
         </div>
       </div>
 

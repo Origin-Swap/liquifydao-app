@@ -163,7 +163,7 @@ export default function StakeFormGenesis({ contractAddress, onStakeSuccess }) {
         </button>
       </div>
 
-      {/* Stake Button */}
+      {/* Stake Button
       <button
         onClick={handleStake}
         disabled={isLoading || !amount || parseFloat(amount) <= 0}
@@ -174,6 +174,13 @@ export default function StakeFormGenesis({ contractAddress, onStakeSuccess }) {
         }`}
       >
         {isLoading ? "Processing..." : "Stake LIQ in Genesis Pool"}
+      </button>  */}
+      <button
+        onClick={handleStake}
+        disabled={true} // <-- DISABLED PERMANENT
+        className="w-full py-3 rounded-xl transition bg-gray-600 cursor-not-allowed"
+      >
+        Not Available Yet
       </button>
     </div>
   );

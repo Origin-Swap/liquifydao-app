@@ -4,7 +4,7 @@ import { useAccount, useBalance, useDisconnect, useWalletClient, usePublicClient
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { bsc } from 'wagmi/chains';
 import { Unplug, Menu, X } from 'lucide-react';
-import { LIQUIFY_TOKEN_ADDRESS, ERC20_ABI } from "../config/contracts";
+import { LIQUIFY_TOKEN_ADDRESS, ERC20_ABI } from "../config/contracts2";
 import { formatUnits } from 'viem'; // <-- TAMBAHKAN import formatUnits
 
 export const Navbar = () => {
